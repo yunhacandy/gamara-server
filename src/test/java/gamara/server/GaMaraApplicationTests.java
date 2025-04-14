@@ -1,10 +1,10 @@
-package gamara.gamara;
+package gamara.server;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ServerApplicationTests {
+class GaMaraApplicationTests {
 
 	@Test
 	void contextLoads() {
