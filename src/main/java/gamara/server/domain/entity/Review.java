@@ -29,7 +29,7 @@ public class Review {
 
     private long userId;
 
-    private long placeId;
+    private long storeId;
 
     private String context;
 
