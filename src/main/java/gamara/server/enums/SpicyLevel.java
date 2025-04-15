@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum SpicyLevel {
     MORE_SPICY("More spicy than other stores"),
     SIMILAR_SPICY("Similar as other stores"),
-    LESS_SPICY("Less spicy than other store");
+    LESS_SPICY("Less spicy than other stores");
 
     private final String description;
 }
