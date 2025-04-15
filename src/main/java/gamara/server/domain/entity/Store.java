@@ -34,7 +34,7 @@ public class Store {
 
     private double longitude;
 
-    private int recommendCount;
+    private int recommendCount = 0;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
