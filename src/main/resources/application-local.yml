@@ -12,3 +12,7 @@ spring:
     url: ${LOCAL_DB_URI}
     username: ${LOCAL_DB_USERNAME}
     password: ${LOCAL_DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update

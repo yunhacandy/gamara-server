@@ -3,6 +3,12 @@ spring:
     activate:
       on-profile: dev
 
-  output:
-    ansi:
-      enabled: always
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DEV_DB_URI}
+    username: ${DEV_DB_USERNAME}
+    password: ${DEV_DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
