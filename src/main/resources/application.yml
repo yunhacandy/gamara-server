@@ -1,0 +1,18 @@
+spring:
+  profiles:
+    active: local
+
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    root: INFO
+    org:
+      springframework:
+        web:
+          servlet:
+            handler:
+              SimpleUrlHandlerMapping: WARN
+      springframework.security: DEBUG
+
+    com:
+      fasterxml.jackson: DEBUG
