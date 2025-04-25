@@ -46,4 +46,14 @@ public class S3Service {
             return Response.createSuccess(uploadedUrl);
         }
     }
+
+    @Transactional
+    public Response<?> deleteFile(String key) {
+        try {
+            s3Operations.deleteObject(BUCKET, key);
+            return Response.createSuccessWithNoData();
+        } catch (Exception e) {
+            return Response.createError("Failed to delete Image file");
+        }
+    }
 }
