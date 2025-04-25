@@ -23,14 +23,14 @@ public class S3Service {
     private final S3Operations s3Operations;
 
     @Transactional
-    public Response<?> uploadFile(MultipartFile multipartFile, String dir) throws IOException {
+    public Response<?> uploadFile(MultipartFile multipartFile, String key) throws IOException {
         String contentType = multipartFile.getContentType();
         if (!MediaType.IMAGE_PNG.toString().equals(contentType) &&
                 !MediaType.IMAGE_JPEG.toString().equals(contentType)) {
             return Response.createError("Only image files can be uploaded");
         }
 
-        String filename = dir + "/" + UUID.randomUUID() + "_" + multipartFile.getOriginalFilename();
+        String filename = key + "/" + UUID.randomUUID() + "_" + multipartFile.getOriginalFilename();
 
         try (InputStream is = multipartFile.getInputStream()) {
             S3Resource resource = s3Operations.upload(
