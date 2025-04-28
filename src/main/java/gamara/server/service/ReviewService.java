@@ -1,15 +1,11 @@
 package gamara.server.service;
 
 import gamara.server.validator.BasicValidator;
-import gamara.server.common.exception.AppException;
-import gamara.server.common.exception.ErrorCode;
 import gamara.server.common.exception.ImageException;
 import gamara.server.converter.ReviewDtoConverter;
 import gamara.server.domain.entity.Review;
 import gamara.server.dto.ReviewCreateRequest;
 import gamara.server.repository.ReviewRepository;
-import gamara.server.repository.StoreRepository;
-import gamara.server.repository.UserRepository;
 import gamara.server.validator.EntityValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,10 +27,10 @@ public class ReviewService {
 
     @Transactional
     public void registerReview(ReviewCreateRequest request, long userId) throws ImageException {
-        basicValidator.checkValidIdRange(userId);
-        basicValidator.checkValidIdRange(request.storeId());
-        basicValidator.checkValidLevelRange(request.peanutLevel());
-        basicValidator.checkValidLevelRange(request.tingleLevel());
+        basicValidator.validateIdRange(userId);
+        basicValidator.validateIdRange(request.storeId());
+        basicValidator.validateLevelRange(request.peanutLevel());
+        basicValidator.validateLevelRange(request.tingleLevel());
 
         entityValidator.validateUserExists(userId);
         entityValidator.validateStoreExists(request.storeId());
