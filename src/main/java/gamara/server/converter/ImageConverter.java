@@ -2,8 +2,8 @@ package gamara.server.converter;
 
 import com.sksamuel.scrimage.ImmutableImage;
 import com.sksamuel.scrimage.webp.WebpWriter;
-import gamara.server.common.exception.ImageException;
 import gamara.server.common.exception.ErrorCode;
+import gamara.server.common.exception.ImageException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class ImageConverter {
     public static File convert(MultipartFile file) throws ImageException {
         String fileExtension = extractFileExtension(file);
         File convertFile = new File(System.getProperty("java.io.tmpdir") + "/" + UUID.randomUUID() + "."
-                + fileExtension);    //TODO: java.io.tmpdir가 맞는지 user.dir가 맞는지 확인
+                + fileExtension);
 
         try {
             FileOutputStream fos = new FileOutputStream(convertFile);
