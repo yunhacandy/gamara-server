@@ -1,6 +1,5 @@
 package gamara.server.service;
 
-import gamara.server.common.Response;
 import gamara.server.common.exception.ErrorCode;
 import gamara.server.common.exception.ImageException;
 import gamara.server.converter.ImageConverter;
@@ -15,7 +14,6 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
@@ -49,11 +47,9 @@ public class S3Service {
         }
     }
 
-    @Transactional
-    public Response<?> deleteFile(String key) throws ImageException { //TODO: delete 사용할거면 iam 수정해서 s3 삭제 권한 허용해야 함
+    public void deleteFile(String key) throws ImageException {
         try {
             s3Operations.deleteObject(BUCKET, key);
-            return Response.createSuccessWithNoData();
         } catch (Exception e) {
             throw new ImageException(ErrorCode.IMAGE_FILE_DELETE_FAIL);
         }
