@@ -50,7 +50,7 @@ public class S3Service {
     }
 
     @Transactional
-    public Response<?> deleteFile(String key) {
+    public Response<?> deleteFile(String key) { //TODO: delete 사용할거면 iam 수정해서 s3 삭제 권한 허용해야 함
         try {
             s3Operations.deleteObject(BUCKET, key);
             return Response.createSuccessWithNoData();

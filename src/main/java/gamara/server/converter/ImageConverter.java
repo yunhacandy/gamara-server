@@ -30,7 +30,8 @@ public class ImageConverter {
 
     public static File convert(MultipartFile file) throws AppException {
         String fileExtension = extractFileExtension(file);
-        File convertFile = new File(System.getProperty("java.io.tmpdir") + "/" + UUID.randomUUID() + "." + fileExtension);    //TODO: java.io.tmpdir가 맞는지 user.dir가 맞는지 확인
+        File convertFile = new File(System.getProperty("java.io.tmpdir") + "/" + UUID.randomUUID() + "."
+                + fileExtension);    //TODO: java.io.tmpdir가 맞는지 user.dir가 맞는지 확인
 
         try {
             FileOutputStream fos = new FileOutputStream(convertFile);
@@ -49,10 +50,13 @@ public class ImageConverter {
 
             File webpFile = ImmutableImage.loader()
                     .fromFile(originalFile)
-                    .output(WebpWriter.DEFAULT, new File(parentPath,fileNameWithoutExtension + ".webp"));
+                    .output(WebpWriter.DEFAULT, new File(parentPath, fileNameWithoutExtension + ".webp"));
 
             if (originalFile.exists()) {
-                originalFile.delete();
+                boolean deleted = originalFile.delete();
+                if (!deleted) {
+                    throw new AppException(ErrorCode.FILE_DELETE_FAIL);
+                }
             }
 
             return webpFile;

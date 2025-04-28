@@ -15,7 +15,8 @@ public enum ErrorCode {
     IMAGE_FILE_DELETE_FAIL("I-002"),
     IMAGE_CONVERT_FAIL("I-003"),
     WEBP_CONVERT_FAIL("I-004"),
-    FILE_EXTENSION_FAULT("I-005");
+    FILE_EXTENSION_FAULT("I-005"),
+    FILE_DELETE_FAIL("I-006");
 
     private final String code;
 }
