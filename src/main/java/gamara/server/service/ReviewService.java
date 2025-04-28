@@ -1,5 +1,6 @@
 package gamara.server.service;
 
+import gamara.server.validator.BasicValidator;
 import gamara.server.common.exception.AppException;
 import gamara.server.common.exception.ErrorCode;
 import gamara.server.common.exception.ImageException;
@@ -26,14 +27,14 @@ public class ReviewService {
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
     private final S3Service s3Service;
-    private final ValidateService validateService;
+    private final BasicValidator basicValidator;
 
     @Transactional
     public void registerReview(ReviewCreateRequest request, long userId) throws ImageException {
-        validateService.checkValidIdRange(userId);
-        validateService.checkValidIdRange(request.storeId());
-        validateService.checkValidLevelRange(request.peanutLevel());
-        validateService.checkValidLevelRange(request.tingleLevel());
+        basicValidator.checkValidIdRange(userId);
+        basicValidator.checkValidIdRange(request.storeId());
+        basicValidator.checkValidLevelRange(request.peanutLevel());
+        basicValidator.checkValidLevelRange(request.tingleLevel());
 
         validateUserExists(userId);
         validateStoreExists(request.storeId());
