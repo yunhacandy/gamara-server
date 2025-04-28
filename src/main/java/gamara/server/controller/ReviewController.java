@@ -12,7 +12,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,5 +36,13 @@ public class ReviewController {
             throws ImageException {
         reviewService.registerReview(request, userId);
         return Response.createSuccessWithNoData("[Review Controller] Register Review");
+    }
+
+    @Operation(summary = "후기 삭제", description = "회원은 본인이 작성한 후기를 삭제할 수 있다")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @DeleteMapping("/{reviewId}")
+    public Response<?> deleteReview(@PathVariable("reviewId") long reviewId, @AuthenticationPrincipal long userId) throws ImageException {
+        reviewService.deleteReview(reviewId, userId);
+        return Response.createSuccessWithNoData("[Review Controller] Delete Review");
     }
 }

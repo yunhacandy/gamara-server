@@ -20,6 +20,10 @@ public enum ErrorCode {
     //User
     USER_NOT_FOUND("U-001"),
 
+    //Review
+    REVIEW_NOT_FOUND("R-001"),
+    REVIEW_FORBIDDEN("R-002"),
+
     //Image
     INVALID_IMAGE_FILE_FORMAT("I-001"),
     IMAGE_FILE_DELETE_FAIL("I-002"),
@@ -27,7 +31,8 @@ public enum ErrorCode {
     WEBP_CONVERT_FAIL("I-004"),
     FILE_EXTENSION_FAULT("I-005"),
     FILE_DELETE_FAIL("I-006"),
-    IMAGE_UPLOAD_FAIL("I-007");
+    IMAGE_UPLOAD_FAIL("I-007"),
+    INVALID_IMAGE_URL_FORMAT("I-008");
 
     private final String code;
 }
