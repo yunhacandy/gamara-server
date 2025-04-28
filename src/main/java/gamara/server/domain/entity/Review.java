@@ -43,6 +43,8 @@ public class Review {
 
     private int tingleLevel;
 
+    private String imageUrl;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 }
