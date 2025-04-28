@@ -27,7 +27,7 @@ public class S3Service {
     private final S3Operations s3Operations;
 
     @Transactional
-    public Response<?> uploadFile(MultipartFile multipartFile, String key) throws IOException {
+    public String uploadFile(MultipartFile multipartFile, String key) throws IOException {
         String fileExtension = ImageConverter.extractFileExtension(multipartFile);
         if (!ImageConverter.isImageFileExtension(fileExtension)) {
             throw new AppException(ErrorCode.INVALID_IMAGE_FILE_FORMAT);
@@ -44,8 +44,7 @@ public class S3Service {
 
             S3Resource resource = s3Operations.upload(BUCKET, filename, is, metadata);
 
-            String uploadedUrl = resource.getURL().toString();
-            return Response.createSuccess(uploadedUrl);
+            return resource.getURL().toString();
         }
     }
 
