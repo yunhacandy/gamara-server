@@ -15,7 +15,7 @@ public class Response<T> {
     private String message;
     private T data;
 
-    public static <T> Response<T> createSuccess(String message, T data) {
+    public static <T> Response<T> createSuccess(T data) {
         return new Response<>(SUCCESS_RESULT, null, data);
     }
 

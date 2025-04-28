@@ -16,3 +16,19 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+      s3:
+        region: ap-northeast-2
+        bucket: ${AWS_S3_BUCKET}
+
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 0B
+      max-file-size: 10MB
+      max-request-size: 10MB
