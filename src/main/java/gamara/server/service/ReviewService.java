@@ -10,6 +10,7 @@ import gamara.server.dto.ReviewCreateRequest;
 import gamara.server.repository.ReviewRepository;
 import gamara.server.repository.StoreRepository;
 import gamara.server.repository.UserRepository;
+import gamara.server.validator.EntityValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,10 +25,9 @@ public class ReviewService {
     private static final String IMAGE_DIR = "review";
 
     private final ReviewRepository reviewRepository;
-    private final StoreRepository storeRepository;
-    private final UserRepository userRepository;
     private final S3Service s3Service;
     private final BasicValidator basicValidator;
+    private final EntityValidator entityValidator;
 
     @Transactional
     public void registerReview(ReviewCreateRequest request, long userId) throws ImageException {
@@ -36,8 +36,8 @@ public class ReviewService {
         basicValidator.checkValidLevelRange(request.peanutLevel());
         basicValidator.checkValidLevelRange(request.tingleLevel());
 
-        validateUserExists(userId);
-        validateStoreExists(request.storeId());
+        entityValidator.validateUserExists(userId);
+        entityValidator.validateStoreExists(request.storeId());
 
         String imageUrl = null;
         MultipartFile imageFile = request.image();
@@ -49,17 +49,5 @@ public class ReviewService {
         reviewRepository.save(review);
 
         log.trace("Completed registering review: reviewId={}", review.getId());
-    }
-
-    private void validateUserExists(long userId) {
-        if (!userRepository.existsById(userId)) {
-            throw new AppException(ErrorCode.USER_NOT_FOUND);
-        }
-    }
-
-    private void validateStoreExists(long storeId) {
-        if (!storeRepository.existsById(storeId)) {
-            throw new AppException(ErrorCode.STORE_NOT_FOUND);
-        }
     }
 }
