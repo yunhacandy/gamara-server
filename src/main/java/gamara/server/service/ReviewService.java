@@ -2,13 +2,13 @@ package gamara.server.service;
 
 import gamara.server.common.exception.AppException;
 import gamara.server.common.exception.ErrorCode;
+import gamara.server.common.exception.ImageException;
 import gamara.server.converter.ReviewDtoConverter;
 import gamara.server.domain.entity.Review;
 import gamara.server.dto.ReviewCreateRequest;
 import gamara.server.repository.ReviewRepository;
 import gamara.server.repository.StoreRepository;
 import gamara.server.repository.UserRepository;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class ReviewService {
     private final ValidateService validateService;
 
     @Transactional
-    public void registerReview(ReviewCreateRequest request, long userId) {
+    public void registerReview(ReviewCreateRequest request, long userId) throws ImageException {
         validateService.checkValidIdRange(userId);
         validateService.checkValidIdRange(request.storeId());
         validateService.checkValidLevelRange(request.peanutLevel());
@@ -41,12 +41,7 @@ public class ReviewService {
         String imageUrl = null;
         MultipartFile imageFile = request.image();
         if (imageFile != null && !imageFile.isEmpty()) {
-            try {
-                imageUrl = s3Service.uploadFile(imageFile, IMAGE_DIR);
-            } catch (IOException e) {
-                log.error("Image upload failed", e);
-                throw new AppException(ErrorCode.IMAGE_UPLOAD_FAIL);
-            }
+            imageUrl = s3Service.uploadFile(imageFile, IMAGE_DIR);
         }
 
         Review review = ReviewDtoConverter.toEntity(userId, request, imageUrl);

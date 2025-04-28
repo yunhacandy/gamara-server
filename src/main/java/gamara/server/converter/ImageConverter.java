@@ -2,7 +2,7 @@ package gamara.server.converter;
 
 import com.sksamuel.scrimage.ImmutableImage;
 import com.sksamuel.scrimage.webp.WebpWriter;
-import gamara.server.common.exception.AppException;
+import gamara.server.common.exception.ImageException;
 import gamara.server.common.exception.ErrorCode;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,10 +15,10 @@ public class ImageConverter {
 
     private static final List<String> IMAGE_FILE_EXTENSIONS = List.of("png", "jpg", "jpeg", "heif");
 
-    public static String extractFileExtension(MultipartFile file) throws AppException {
+    public static String extractFileExtension(MultipartFile file) throws ImageException {
         String originalFilename = file.getOriginalFilename();
         if (originalFilename == null || !originalFilename.contains(".")) {
-            throw new AppException(ErrorCode.FILE_EXTENSION_FAULT);
+            throw new ImageException(ErrorCode.FILE_EXTENSION_FAULT);
         }
 
         return originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
@@ -28,7 +28,7 @@ public class ImageConverter {
         return IMAGE_FILE_EXTENSIONS.contains(fileExtension.toLowerCase());
     }
 
-    public static File convert(MultipartFile file) throws AppException {
+    public static File convert(MultipartFile file) throws ImageException {
         String fileExtension = extractFileExtension(file);
         File convertFile = new File(System.getProperty("java.io.tmpdir") + "/" + UUID.randomUUID() + "."
                 + fileExtension);    //TODO: java.io.tmpdir가 맞는지 user.dir가 맞는지 확인
@@ -39,11 +39,11 @@ public class ImageConverter {
             fos.close();
             return convertFile;
         } catch (IOException e) {
-            throw new AppException(ErrorCode.IMAGE_CONVERT_FAIL);
+            throw new ImageException(ErrorCode.IMAGE_CONVERT_FAIL);
         }
     }
 
-    public static File convertToWebp(File originalFile) throws AppException {
+    public static File convertToWebp(File originalFile) throws ImageException {
         try {
             String parentPath = originalFile.getParent();
             String fileNameWithoutExtension = originalFile.getName().replaceFirst("[.][^.]+$", "");
@@ -55,13 +55,13 @@ public class ImageConverter {
             if (originalFile.exists()) {
                 boolean deleted = originalFile.delete();
                 if (!deleted) {
-                    throw new AppException(ErrorCode.FILE_DELETE_FAIL);
+                    throw new ImageException(ErrorCode.FILE_DELETE_FAIL);
                 }
             }
 
             return webpFile;
         } catch (IOException e) {
-            throw new AppException(ErrorCode.WEBP_CONVERT_FAIL);
+            throw new ImageException(ErrorCode.WEBP_CONVERT_FAIL);
         }
     }
 }
