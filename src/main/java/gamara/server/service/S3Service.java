@@ -1,15 +1,19 @@
 package gamara.server.service;
 
 import gamara.server.common.Response;
+import gamara.server.common.exception.AppException;
+import gamara.server.common.exception.ErrorCode;
+import gamara.server.converter.ImageConverter;
 import io.awspring.cloud.s3.ObjectMetadata;
 import io.awspring.cloud.s3.S3Operations;
 import io.awspring.cloud.s3.S3Resource;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,23 +28,21 @@ public class S3Service {
 
     @Transactional
     public Response<?> uploadFile(MultipartFile multipartFile, String key) throws IOException {
-        String contentType = multipartFile.getContentType();
-        if (!MediaType.IMAGE_PNG.toString().equals(contentType) &&
-                !MediaType.IMAGE_JPEG.toString().equals(contentType)) {
-            return Response.createError("Only image files can be uploaded");
+        String fileExtension = ImageConverter.extractFileExtension(multipartFile);
+        if (!ImageConverter.isImageFileExtension(fileExtension)) {
+            throw new AppException(ErrorCode.INVALID_IMAGE_FILE_FORMAT);
         }
 
-        String filename = key + "/" + UUID.randomUUID() + "_" + multipartFile.getOriginalFilename();
+        File originalFile = ImageConverter.convert(multipartFile);
+        File webpFile = ImageConverter.convertToWebp(originalFile);
+        String filename = key + "/" + UUID.randomUUID() + ".webp";
 
-        try (InputStream is = multipartFile.getInputStream()) {
-            S3Resource resource = s3Operations.upload(
-                    BUCKET,
-                    filename,
-                    is,
-                    ObjectMetadata.builder()
-                            .contentType(contentType)
-                            .build()
-            );
+        try (InputStream is = new FileInputStream(webpFile)) {
+            ObjectMetadata metadata = ObjectMetadata.builder()
+                    .contentType("image/webp")
+                    .build();
+
+            S3Resource resource = s3Operations.upload(BUCKET, filename, is, metadata);
 
             String uploadedUrl = resource.getURL().toString();
             return Response.createSuccess(uploadedUrl);
@@ -53,7 +55,7 @@ public class S3Service {
             s3Operations.deleteObject(BUCKET, key);
             return Response.createSuccessWithNoData();
         } catch (Exception e) {
-            return Response.createError("Failed to delete Image file");
+            throw new AppException(ErrorCode.IMAGE_FILE_DELETE_FAIL);
         }
     }
 }
