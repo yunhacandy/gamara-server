@@ -1,8 +1,7 @@
 package gamara.server.service;
 
-import gamara.server.common.Response;
-import gamara.server.common.exception.AppException;
 import gamara.server.common.exception.ErrorCode;
+import gamara.server.common.exception.ImageException;
 import gamara.server.converter.ImageConverter;
 import io.awspring.cloud.s3.ObjectMetadata;
 import io.awspring.cloud.s3.S3Operations;
@@ -15,7 +14,6 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
@@ -26,11 +24,10 @@ public class S3Service {
     private static final String BUCKET = System.getenv("AWS_S3_BUCKET");
     private final S3Operations s3Operations;
 
-    @Transactional
-    public Response<?> uploadFile(MultipartFile multipartFile, String key) throws IOException {
+    public String uploadFile(MultipartFile multipartFile, String key) throws ImageException {
         String fileExtension = ImageConverter.extractFileExtension(multipartFile);
         if (!ImageConverter.isImageFileExtension(fileExtension)) {
-            throw new AppException(ErrorCode.INVALID_IMAGE_FILE_FORMAT);
+            throw new ImageException(ErrorCode.INVALID_IMAGE_FILE_FORMAT);
         }
 
         File originalFile = ImageConverter.convert(multipartFile);
@@ -44,18 +41,17 @@ public class S3Service {
 
             S3Resource resource = s3Operations.upload(BUCKET, filename, is, metadata);
 
-            String uploadedUrl = resource.getURL().toString();
-            return Response.createSuccess(uploadedUrl);
+            return resource.getURL().toString();
+        } catch (IOException e) {
+            throw new ImageException(ErrorCode.IMAGE_UPLOAD_FAIL);
         }
     }
 
-    @Transactional
-    public Response<?> deleteFile(String key) { //TODO: delete 사용할거면 iam 수정해서 s3 삭제 권한 허용해야 함
+    public void deleteFile(String key) throws ImageException {
         try {
             s3Operations.deleteObject(BUCKET, key);
-            return Response.createSuccessWithNoData();
         } catch (Exception e) {
-            throw new AppException(ErrorCode.IMAGE_FILE_DELETE_FAIL);
+            throw new ImageException(ErrorCode.IMAGE_FILE_DELETE_FAIL);
         }
     }
 }
