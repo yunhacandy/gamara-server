@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class JwtProvider {
+
     private final JwtProperties jwtProperties;
 
     private Claims getClaims(String token) {
