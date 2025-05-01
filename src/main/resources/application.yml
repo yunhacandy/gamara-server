@@ -18,8 +18,6 @@ logging:
       fasterxml.jackson: DEBUG
 
 jwt:
-  secretKey: ${JWT_SECRET_KEY}
-  access:
-    expiration: 1800000 #30분
-  refresh:
-    expiration: 604800000 #7일간
+  secret: ${JWT_SECRET_KEY}
+  access-token-time: 1800000 #30분
+  refresh-token-time: 604800000 #7일간
