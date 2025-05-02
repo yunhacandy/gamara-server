@@ -1,11 +1,11 @@
 package gamara.server.security.jwt.properties;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-@Getter
-@AllArgsConstructor
+@Data
+@Component
 @ConfigurationProperties(prefix = "jwt")
 public class JwtProperties {
     private String secretKey;
