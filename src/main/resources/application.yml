@@ -3,7 +3,6 @@ spring:
     active: local
 
   security:
-    security:
       oauth2:
         client:
           registration:
@@ -13,7 +12,7 @@ spring:
               redirect-uri: http://localhost:8080/login/oauth2/code/kakao
               authorization-grant-type: authorization_code
               client-id: ${KAKAO_CLIENT_ID}
-#              client-secret: ${KAKAO_CLIENT_SECRET}
+              client-secret: ${KAKAO_CLIENT_SECRET}
               scope: account_email,profile_nickname
           provider:
             kakao:
@@ -21,8 +20,8 @@ spring:
               authorization-uri: https://kauth.kakao.com/oauth/authorize
               token-uri: https://kauth.kakao.com/oauth/token
               user-info-uri: https://kapi.kakao.com/v2/user/me
-    oauth:
-      authorizedRedirectUri: http://localhost:3000/login/redirected
+#  oauth:
+#    authorizedRedirectUri: http://localhost:3000/login/redirected
 
 logging:
   config: classpath:logback-spring.xml
