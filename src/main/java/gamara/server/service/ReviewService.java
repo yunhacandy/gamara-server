@@ -5,7 +5,7 @@ import gamara.server.common.exception.ErrorCode;
 import gamara.server.common.exception.ImageException;
 import gamara.server.converter.ReviewDtoConverter;
 import gamara.server.domain.entity.Review;
-import gamara.server.dto.ReviewCreateRequest;
+import gamara.server.dto.request.ReviewCreateRequest;
 import gamara.server.repository.ReviewRepository;
 import gamara.server.validator.BasicValidator;
 import gamara.server.validator.EntityValidator;
