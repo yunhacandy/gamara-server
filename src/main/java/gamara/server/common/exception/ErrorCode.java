@@ -32,7 +32,13 @@ public enum ErrorCode {
     FILE_EXTENSION_FAULT("I-005"),
     FILE_DELETE_FAIL("I-006"),
     IMAGE_UPLOAD_FAIL("I-007"),
-    INVALID_IMAGE_URL_FORMAT("I-008");
+    INVALID_IMAGE_URL_FORMAT("I-008"),
+
+    // Jwt
+    INVALID_ACCESS_TOKEN("J-001"),
+    INVALID_REFRESH_TOKEN("J-002"),
+    INVALID_JWT("J-003"),
+    EXPIRED_TOKEN("J-004");
 
     private final String code;
 }

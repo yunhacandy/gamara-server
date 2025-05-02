@@ -1,8 +1,11 @@
 package gamara.server.security.jwt;
 
+import gamara.server.common.exception.AppException;
+import gamara.server.common.exception.ErrorCode;
 import gamara.server.security.jwt.dto.AccessTokenInfo;
 import gamara.server.security.jwt.properties.JwtProperties;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
@@ -86,23 +89,33 @@ public class JwtProvider {
     }
 
     public AccessTokenInfo parseAccessToken(String token) {
-        if (isAccessToken(token)) {
-            Claims claims = getClaims(token);
-            return AccessTokenInfo.of(
-                    Long.parseLong(claims.getSubject()),
-                    (String) claims.get("role")
-            );
-        } else {
-            throw new UnsupportedJwtException("Incorrect Access Token.");
+        try {
+            if (isAccessToken(token)) {
+                Claims claims = getClaims(token);
+                return AccessTokenInfo.of(
+                        Long.parseLong(claims.getSubject()),
+                        (String) claims.get("role")
+                );
+            }
+            throw new AppException(ErrorCode.INVALID_ACCESS_TOKEN);
+        } catch (ExpiredJwtException e) {
+            throw new AppException(ErrorCode.EXPIRED_TOKEN);
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.INVALID_JWT);
         }
     }
 
     public Long parseRefreshToken(String token) {
-        if (isRefreshToken(token)) {
-            Claims claims = getClaims(token);
-            return Long.parseLong(claims.getSubject());
-        } else {
-            throw new UnsupportedJwtException("Incorrect Refresh Token.");
+        try {
+            if (isRefreshToken(token)) {
+                Claims claims = getClaims(token);
+                return Long.parseLong(claims.getSubject());
+            }
+            throw new AppException(ErrorCode.INVALID_REFRESH_TOKEN);
+        } catch (ExpiredJwtException e) {
+            throw new AppException(ErrorCode.EXPIRED_TOKEN);
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.INVALID_JWT);
         }
     }
 
