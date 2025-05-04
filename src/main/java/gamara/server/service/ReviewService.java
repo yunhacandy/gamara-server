@@ -39,6 +39,10 @@ public class ReviewService {
         entityValidator.validateUserExists(userId);
         entityValidator.validateStoreExists(request.storeId());
 
+        if (reviewRepository.existsByUserIdAndStoreId(userId, request.storeId())) {
+            throw new AppException(ErrorCode. REVIEW_ALREADY_EXISTS);
+        }
+
         String imageUrl = null;
         MultipartFile imageFile = request.image();
         if (imageFile != null && !imageFile.isEmpty()) {

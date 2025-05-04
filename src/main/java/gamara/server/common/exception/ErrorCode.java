@@ -23,6 +23,7 @@ public enum ErrorCode {
     //Review
     REVIEW_NOT_FOUND("R-001"),
     REVIEW_FORBIDDEN("R-002"),
+    REVIEW_ALREADY_EXISTS("R-003"),
 
     //Image
     INVALID_IMAGE_FILE_FORMAT("I-001"),
