@@ -13,7 +13,7 @@ public class AuthConverter {
         return new LoginResultDto(accessToken, refreshToken, isSignUp);
     }
 
-    public static User toEntity(String email, String nickname, Provider provider) {
+    public static User toUserEntity(String email, String nickname, Provider provider) {
         return User.builder()
                 .email(email)
                 .nickname(nickname)

@@ -34,7 +34,7 @@ public class AuthService {
 
         // 2. 이메일로 기존 사용자 조회 및 신규 등록
         User user = userRepository.findByEmail(email)
-                .orElseGet(() -> userRepository.save(AuthConverter.toEntity(email, nickname, provider)));
+                .orElseGet(() -> userRepository.save(AuthConverter.toUserEntity(email, nickname, provider)));
 
         // 3. JWT 발급
         String accessToken = jwtProvider.generateAccessToken(user.getId(), "ROLE_USER");
