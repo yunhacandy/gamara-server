@@ -1,5 +1,6 @@
 package gamara.server.config;
 
+import gamara.server.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +20,7 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/api/auth/**"
     };
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -30,8 +32,9 @@ public class SecurityConfig {
                         .requestMatchers(WHITE_LIST).permitAll()
                         .anyRequest().authenticated()
                 )
-                .oauth2Login(AbstractHttpConfigurer::disable);
-//        .addFilterBefore(jwtAuthenticationFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
+                .oauth2Login(AbstractHttpConfigurer::disable)
+                .addFilterBefore(jwtAuthenticationFilter,
+                        org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }
