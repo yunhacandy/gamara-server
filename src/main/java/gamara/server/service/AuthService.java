@@ -9,6 +9,8 @@ import gamara.server.dto.response.OAuthUserInfoResponse;
 import gamara.server.enums.Provider;
 import gamara.server.repository.UserRepository;
 import gamara.server.security.jwt.JwtProvider;
+import gamara.server.validator.BasicValidator;
+import gamara.server.validator.EntityValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final RequestOAuthUserInfoService requestOAuthUserInfoService;
     private final UserRepository userRepository;
+    private final BasicValidator basicValidator;
+    private final EntityValidator entityValidator;
 
     public LoginResultDto loginKakao(KakaoLoginRequest request) {
         // 1. accessToken으로 사용자 정보 요청
@@ -38,5 +42,10 @@ public class AuthService {
 
         // 4. converter 사용해서 dto로 변환
         return AuthConverter.toLoginResultDto(user, accessToken, refreshToken);
+    }
+
+    public void validateRegisteredUser(long userId) {
+        basicValidator.validateIdRange(userId);
+        entityValidator.validateUserExists(userId);
     }
 }
