@@ -1,4 +1,4 @@
-package gamara.server.repository;
+package gamara.server.domain.repository;
 
 import gamara.server.domain.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;

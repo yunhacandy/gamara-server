@@ -7,7 +7,7 @@ import gamara.server.dto.LoginResultDto;
 import gamara.server.dto.request.KakaoLoginRequest;
 import gamara.server.dto.response.OAuthUserInfoResponse;
 import gamara.server.enums.Provider;
-import gamara.server.repository.UserRepository;
+import gamara.server.domain.repository.UserRepository;
 import gamara.server.security.jwt.JwtProvider;
 import gamara.server.validator.BasicValidator;
 import gamara.server.validator.EntityValidator;
