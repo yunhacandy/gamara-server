@@ -39,7 +39,7 @@ public class ReviewController {
 
         long userId = Long.parseLong(user.getUserId());
         reviewService.registerReview(request, userId);
-        return Response.createSuccessWithNoData("[Review Controller] Register Review");
+        return Response.createSuccessWithMessage("[Review Controller] Register Review");
     }
 
     @Operation(summary = "후기 삭제", description = "회원은 본인이 작성한 후기를 삭제할 수 있다")
@@ -50,6 +50,6 @@ public class ReviewController {
 
         long userId = Long.parseLong(user.getUserId());
         reviewService.deleteReview(reviewId, userId);
-        return Response.createSuccessWithNoData("[Review Controller] Delete Review");
+        return Response.createSuccessWithMessage("[Review Controller] Delete Review");
     }
 }
