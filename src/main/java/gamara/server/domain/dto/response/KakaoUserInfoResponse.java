@@ -1,4 +1,4 @@
-package gamara.server.dto.response;
+package gamara.server.domain.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -39,7 +39,8 @@ public enum ErrorCode {
     INVALID_ACCESS_TOKEN("J-001"),
     INVALID_REFRESH_TOKEN("J-002"),
     INVALID_JWT("J-003"),
-    EXPIRED_TOKEN("J-004");
+    EXPIRED_TOKEN("J-004"),
+    REFRESH_TOKEN_NOT_FOUND("J-005");
 
     private final String code;
 }

@@ -2,7 +2,8 @@ package gamara.server.controller;
 
 import gamara.server.common.Response;
 import gamara.server.common.exception.ImageException;
-import gamara.server.dto.request.ReviewCreateRequest;
+import gamara.server.domain.dto.request.ReviewCreateRequest;
+import gamara.server.security.jwt.AuthDetails;
 import gamara.server.service.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,8 +33,11 @@ public class ReviewController {
     @Operation(summary = "후기 등록", description = "맵기 단계, 땅콩 소스 정도, 사골 유무, 얼얼함 단계 등 다양한 정보를 담은 후기를 등록합니다")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @PostMapping
-    public Response<?> registerReview(@Valid @ModelAttribute ReviewCreateRequest request, @AuthenticationPrincipal long userId)
+    public Response<?> registerReview(@Valid @ModelAttribute ReviewCreateRequest request,
+                                      @AuthenticationPrincipal AuthDetails user)
             throws ImageException {
+
+        long userId = Long.parseLong(user.getUserId());
         reviewService.registerReview(request, userId);
         return Response.createSuccessWithNoData("[Review Controller] Register Review");
     }
@@ -41,7 +45,10 @@ public class ReviewController {
     @Operation(summary = "후기 삭제", description = "회원은 본인이 작성한 후기를 삭제할 수 있다")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @DeleteMapping("/{reviewId}")
-    public Response<?> deleteReview(@PathVariable("reviewId") long reviewId, @AuthenticationPrincipal long userId) throws ImageException {
+    public Response<?> deleteReview(@PathVariable("reviewId") long reviewId, @AuthenticationPrincipal AuthDetails user)
+            throws ImageException {
+
+        long userId = Long.parseLong(user.getUserId());
         reviewService.deleteReview(reviewId, userId);
         return Response.createSuccessWithNoData("[Review Controller] Delete Review");
     }

@@ -1,6 +1,6 @@
-package gamara.server.auth;
+package gamara.server.service;
 
-import gamara.server.dto.response.OAuthUserInfoResponse;
+import gamara.server.domain.dto.response.OAuthUserInfoResponse;
 import gamara.server.enums.Provider;
 import gamara.server.infrastructure.client.OAuthApiClient;
 import java.util.EnumMap;
