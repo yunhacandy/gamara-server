@@ -1,7 +1,6 @@
 package gamara.server.domain.entity;
 
 import gamara.server.enums.Provider;
-import gamara.server.enums.UserStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -39,9 +38,6 @@ public class User {
     private Provider provider;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private UserStatus userStatus;
-
     private boolean isDeleted;
 
     @Column(nullable = false)
