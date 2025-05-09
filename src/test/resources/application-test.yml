@@ -1,0 +1,19 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  data:
+    redis:
+      host: localhost
+      port: 6378
+
+  cloud:
+    aws:
+      s3:
+        region: ap-northeast-2
+
+jwt:
+  secret-key: test-secret-key-should-be-very-long-for-hmac
+  access-token-time: 1800000
+  refresh-token-time: 604800000
