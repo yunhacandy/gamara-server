@@ -4,6 +4,7 @@ import gamara.server.domain.entity.User;
 import gamara.server.dto.LoginResultDto;
 import gamara.server.enums.Provider;
 import gamara.server.enums.UserStatus;
+import gamara.server.redis.entity.RefreshToken;
 import java.time.LocalDateTime;
 
 public class AuthConverter {
@@ -22,6 +23,14 @@ public class AuthConverter {
                 .createdAt(LocalDateTime.now())
                 .modifiedAt(LocalDateTime.now())
                 .isDeleted(false)
+                .build();
+    }
+
+    public static RefreshToken toRefreshTokenEntity(Long userId, String refreshToken, long ttl) {
+        return RefreshToken.builder()
+                .id(userId)
+                .refreshToken(refreshToken)
+                .ttl(ttl)
                 .build();
     }
 }

@@ -1,8 +1,10 @@
 package gamara.server.controller;
 
 import gamara.server.common.Response;
-import gamara.server.dto.request.KakaoLoginRequest;
 import gamara.server.dto.LoginResultDto;
+import gamara.server.dto.ReissueResultDto;
+import gamara.server.dto.request.KakaoLoginRequest;
+import gamara.server.dto.request.ReissueRequest;
 import gamara.server.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,5 +29,11 @@ public class AuthController {
     public Response<LoginResultDto> loginKakao(@RequestBody KakaoLoginRequest request) {
         LoginResultDto response = authService.loginKakao(request);
         return Response.createSuccess(response);
+    }
+
+    @Operation(summary = "access token 재발급", description = "만료된 access token 을 refresh token으로 재발급 하는 API")
+    @PostMapping("/reissue")
+    public Response<ReissueResultDto> reissueToken(@RequestBody ReissueRequest reissueRequest) {
+        return Response.createSuccess(authService.reissueToken(reissueRequest.refreshToken()));
     }
 }
