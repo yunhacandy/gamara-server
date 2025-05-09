@@ -1,4 +1,4 @@
-package gamara.server.dto.request;
+package gamara.server.domain.dto.request;
 
 public record LogoutRequest(
         String accessToken,

@@ -1,6 +1,6 @@
-package gamara.server.redis.repository;
+package gamara.server.repository;
 
-import gamara.server.redis.entity.BlackList;
+import gamara.server.domain.entity.redis.entity.BlackList;
 import org.springframework.data.repository.CrudRepository;
 
 public interface BlackListRepository extends CrudRepository<BlackList, String> {

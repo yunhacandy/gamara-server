@@ -1,7 +1,7 @@
 package gamara.server.infrastructure.client;
 
-import gamara.server.dto.response.KakaoUserInfoResponse;
-import gamara.server.dto.response.OAuthUserInfoResponse;
+import gamara.server.domain.dto.response.KakaoUserInfoResponse;
+import gamara.server.domain.dto.response.OAuthUserInfoResponse;
 import gamara.server.enums.Provider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

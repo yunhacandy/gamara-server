@@ -1,4 +1,4 @@
-package gamara.server.dto.request;
+package gamara.server.domain.dto.request;
 
 import gamara.server.enums.SpicyLevel;
 import io.swagger.v3.oas.annotations.media.Schema;

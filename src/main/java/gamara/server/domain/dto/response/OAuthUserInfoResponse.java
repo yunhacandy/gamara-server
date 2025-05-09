@@ -1,4 +1,4 @@
-package gamara.server.dto.response;
+package gamara.server.domain.dto.response;
 
 import gamara.server.enums.Provider;
 

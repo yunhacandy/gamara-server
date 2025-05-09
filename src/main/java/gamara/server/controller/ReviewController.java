@@ -2,7 +2,7 @@ package gamara.server.controller;
 
 import gamara.server.common.Response;
 import gamara.server.common.exception.ImageException;
-import gamara.server.dto.request.ReviewCreateRequest;
+import gamara.server.domain.dto.request.ReviewCreateRequest;
 import gamara.server.security.jwt.AuthDetails;
 import gamara.server.service.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;

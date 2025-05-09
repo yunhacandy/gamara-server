@@ -1,7 +1,7 @@
 package gamara.server.converter;
 
 import gamara.server.domain.entity.Review;
-import gamara.server.dto.request.ReviewCreateRequest;
+import gamara.server.domain.dto.request.ReviewCreateRequest;
 import java.time.LocalDateTime;
 
 public class ReviewDtoConverter {

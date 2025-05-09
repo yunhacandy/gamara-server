@@ -1,11 +1,11 @@
 package gamara.server.controller;
 
 import gamara.server.common.Response;
-import gamara.server.dto.LoginResultDto;
-import gamara.server.dto.ReissueResultDto;
-import gamara.server.dto.request.KakaoLoginRequest;
-import gamara.server.dto.request.LogoutRequest;
-import gamara.server.dto.request.ReissueRequest;
+import gamara.server.domain.dto.LoginResultDto;
+import gamara.server.domain.dto.ReissueResultDto;
+import gamara.server.domain.dto.request.KakaoLoginRequest;
+import gamara.server.domain.dto.request.LogoutRequest;
+import gamara.server.domain.dto.request.ReissueRequest;
 import gamara.server.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

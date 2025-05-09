@@ -1,11 +1,11 @@
 package gamara.server.converter;
 
 import gamara.server.domain.entity.User;
-import gamara.server.dto.LoginResultDto;
+import gamara.server.domain.dto.LoginResultDto;
 import gamara.server.enums.Provider;
 import gamara.server.enums.UserStatus;
-import gamara.server.redis.entity.BlackList;
-import gamara.server.redis.entity.RefreshToken;
+import gamara.server.domain.entity.redis.entity.BlackList;
+import gamara.server.domain.entity.redis.entity.RefreshToken;
 import java.time.LocalDateTime;
 
 public class AuthConverter {

@@ -1,6 +1,6 @@
-package gamara.server.redis.repository;
+package gamara.server.repository;
 
-import gamara.server.redis.entity.RefreshToken;
+import gamara.server.domain.entity.redis.entity.RefreshToken;
 import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 

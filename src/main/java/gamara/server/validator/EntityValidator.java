@@ -2,8 +2,8 @@ package gamara.server.validator;
 
 import gamara.server.common.exception.AppException;
 import gamara.server.common.exception.ErrorCode;
-import gamara.server.domain.repository.StoreRepository;
-import gamara.server.domain.repository.UserRepository;
+import gamara.server.repository.StoreRepository;
+import gamara.server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

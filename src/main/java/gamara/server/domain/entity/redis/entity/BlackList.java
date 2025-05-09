@@ -1,4 +1,4 @@
-package gamara.server.redis.entity;
+package gamara.server.domain.entity.redis.entity;
 
 import jakarta.persistence.Id;
 import java.util.concurrent.TimeUnit;

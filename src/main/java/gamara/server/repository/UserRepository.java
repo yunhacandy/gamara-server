@@ -1,4 +1,4 @@
-package gamara.server.domain.repository;
+package gamara.server.repository;
 
 import gamara.server.domain.entity.User;
 import java.util.Optional;
