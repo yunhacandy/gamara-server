@@ -16,10 +16,10 @@ import gamara.server.domain.entity.redis.entity.RefreshToken;
 import gamara.server.repository.BlackListRepository;
 import gamara.server.repository.RefreshTokenRepository;
 import gamara.server.security.jwt.JwtProvider;
+import gamara.server.security.jwt.properties.JwtProperties;
 import gamara.server.validator.BasicValidator;
 import gamara.server.validator.EntityValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,15 +28,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private final JwtProvider jwtProvider;
+    private final JwtProperties jwtProperties;
     private final RequestOAuthUserInfoService requestOAuthUserInfoService;
     private final UserRepository userRepository;
     private final BasicValidator basicValidator;
     private final EntityValidator entityValidator;
     private final RefreshTokenRepository refreshTokenRepository;
     private final BlackListRepository blackListRepository;
-
-    @Value("${jwt.refresh-token-time}")
-    private Long refreshTokenTime;
 
     public LoginResultDto loginKakao(KakaoLoginRequest request) {
         // 1. accessToken으로 사용자 정보 요청
@@ -58,7 +56,7 @@ public class AuthService {
         RefreshToken tokenEntity = AuthConverter.toRefreshTokenEntity(
                 user.getId(),
                 refreshToken,
-                refreshTokenTime
+                jwtProperties.getRefreshTokenTime()
         );
         refreshTokenRepository.save(tokenEntity);
 
@@ -95,7 +93,7 @@ public class AuthService {
         RefreshToken tokenEntity = AuthConverter.toRefreshTokenEntity(
                 userId,
                 newRefreshToken,
-                refreshTokenTime
+                jwtProperties.getRefreshTokenTime()
         );
         refreshTokenRepository.save(tokenEntity);
 
