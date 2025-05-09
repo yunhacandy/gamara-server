@@ -4,6 +4,7 @@ import gamara.server.domain.entity.User;
 import gamara.server.dto.LoginResultDto;
 import gamara.server.enums.Provider;
 import gamara.server.enums.UserStatus;
+import gamara.server.redis.entity.BlackList;
 import gamara.server.redis.entity.RefreshToken;
 import java.time.LocalDateTime;
 
@@ -30,6 +31,13 @@ public class AuthConverter {
         return RefreshToken.builder()
                 .id(userId)
                 .refreshToken(refreshToken)
+                .ttl(ttl)
+                .build();
+    }
+
+    public static BlackList toBlackList(String token, long ttl) {
+        return BlackList.builder()
+                .id(token)
                 .ttl(ttl)
                 .build();
     }

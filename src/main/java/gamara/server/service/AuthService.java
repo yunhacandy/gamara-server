@@ -9,9 +9,12 @@ import gamara.server.domain.repository.UserRepository;
 import gamara.server.dto.LoginResultDto;
 import gamara.server.dto.ReissueResultDto;
 import gamara.server.dto.request.KakaoLoginRequest;
+import gamara.server.dto.request.LogoutRequest;
 import gamara.server.dto.response.OAuthUserInfoResponse;
 import gamara.server.enums.Provider;
+import gamara.server.redis.entity.BlackList;
 import gamara.server.redis.entity.RefreshToken;
+import gamara.server.redis.repository.BlackListRepository;
 import gamara.server.redis.repository.RefreshTokenRepository;
 import gamara.server.security.jwt.JwtProvider;
 import gamara.server.validator.BasicValidator;
@@ -19,6 +22,7 @@ import gamara.server.validator.EntityValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +34,7 @@ public class AuthService {
     private final BasicValidator basicValidator;
     private final EntityValidator entityValidator;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final BlackListRepository blackListRepository;
 
     @Value("${jwt.refresh-token-time}")
     private Long refreshTokenTime;
@@ -97,5 +102,31 @@ public class AuthService {
 
         // 7. 결과 반환
         return new ReissueResultDto(newAccessToken, newRefreshToken);
+    }
+
+    @Transactional
+    public void logout(LogoutRequest logoutRequest) {
+        // 1. accessToken → 블랙리스트 등록
+        setBlackList(logoutRequest.accessToken());
+
+        // 2. refreshToken → Redis에서 삭제
+        deleteRefreshToken(logoutRequest.refreshToken());
+    }
+
+    private void setBlackList(String accessToken) {
+        long ttl = jwtProvider.getExpiration(accessToken);
+        BlackList blacklist = AuthConverter.toBlackList(accessToken, ttl);
+        blackListRepository.save(blacklist);
+    }
+
+    private void deleteRefreshToken(String refreshToken) {
+        RefreshToken refreshTokenEntity = refreshTokenRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(() -> new AppException(ErrorCode.REFRESH_TOKEN_NOT_FOUND));
+
+        refreshTokenRepository.delete(refreshTokenEntity);
+    }
+
+    public boolean isBlocked(String accessToken) {
+        return blackListRepository.findById(accessToken).isPresent();
     }
 }
