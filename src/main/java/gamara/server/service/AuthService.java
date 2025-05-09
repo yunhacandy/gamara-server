@@ -54,7 +54,7 @@ public class AuthService {
         RefreshToken tokenEntity = AuthConverter.toRefreshTokenEntity(
                 user.getId(),
                 refreshToken,
-                jwtProvider.getRefreshTokenTtlMilliSecond()
+                refreshTokenTime
         );
         refreshTokenRepository.save(tokenEntity);
 
@@ -91,7 +91,7 @@ public class AuthService {
         RefreshToken tokenEntity = AuthConverter.toRefreshTokenEntity(
                 userId,
                 newRefreshToken,
-                jwtProvider.getRefreshTokenTtlMilliSecond()
+                refreshTokenTime
         );
         refreshTokenRepository.save(tokenEntity);
 
