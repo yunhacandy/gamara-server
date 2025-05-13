@@ -36,7 +36,6 @@ public class ReviewController {
     public Response<?> registerReview(@Valid @ModelAttribute ReviewCreateRequest request,
                                       @AuthenticationPrincipal AuthDetails user)
             throws ImageException {
-
         long userId = Long.parseLong(user.getUserId());
         reviewService.registerReview(request, userId);
         return Response.createSuccessWithMessage("[Review Controller] Register Review");
@@ -47,7 +46,6 @@ public class ReviewController {
     @DeleteMapping("/{reviewId}")
     public Response<?> deleteReview(@PathVariable("reviewId") long reviewId, @AuthenticationPrincipal AuthDetails user)
             throws ImageException {
-
         long userId = Long.parseLong(user.getUserId());
         reviewService.deleteReview(reviewId, userId);
         return Response.createSuccessWithMessage("[Review Controller] Delete Review");
