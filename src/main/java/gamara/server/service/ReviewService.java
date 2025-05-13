@@ -3,7 +3,7 @@ package gamara.server.service;
 import gamara.server.common.exception.AppException;
 import gamara.server.common.exception.ErrorCode;
 import gamara.server.common.exception.ImageException;
-import gamara.server.converter.ReviewDtoConverter;
+import gamara.server.converter.ReviewConverter;
 import gamara.server.domain.entity.Review;
 import gamara.server.domain.dto.request.ReviewCreateRequest;
 import gamara.server.repository.ReviewRepository;
@@ -49,7 +49,7 @@ public class ReviewService {
             imageUrl = s3Service.uploadFile(imageFile, IMAGE_DIR);
         }
 
-        Review review = ReviewDtoConverter.toEntity(userId, request, imageUrl);
+        Review review = ReviewConverter.toEntity(userId, request, imageUrl);
         reviewRepository.save(review);
 
         log.trace("Completed registering review: reviewId={}", review.getId());
