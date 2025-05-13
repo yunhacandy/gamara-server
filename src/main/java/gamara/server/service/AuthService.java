@@ -66,7 +66,7 @@ public class AuthService {
 
     public void validateRegisteredUser(long userId) {
         basicValidator.validateIdRange(userId);
-        entityValidator.validateUserExists(userId);
+        entityValidator.validateUserIsActive(userId);
     }
 
     public ReissueResultDto reissueToken(String refreshToken) {
