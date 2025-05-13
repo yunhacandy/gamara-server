@@ -36,7 +36,7 @@ public class ReviewService {
         basicValidator.validateLevelRange(request.peanutLevel());
         basicValidator.validateLevelRange(request.tingleLevel());
 
-        entityValidator.validateUserExists(userId);
+        entityValidator.validateUserIsActive(userId);
         entityValidator.validateStoreExists(request.storeId());
 
         if (reviewRepository.existsByUserIdAndStoreId(userId, request.storeId())) {
@@ -60,7 +60,7 @@ public class ReviewService {
         basicValidator.validateIdRange(reviewId);
         basicValidator.validateIdRange(userId);
 
-        entityValidator.validateUserExists(userId);
+        entityValidator.validateUserIsActive(userId);
 
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new AppException(ErrorCode.REVIEW_NOT_FOUND));
