@@ -34,9 +34,9 @@ public class ReviewController {
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @PostMapping
     public Response<?> registerReview(@Valid @ModelAttribute ReviewCreateRequest request,
-                                      @AuthenticationPrincipal AuthDetails user)
+                                      @AuthenticationPrincipal AuthDetails authDetails)
             throws ImageException {
-        long userId = Long.parseLong(user.getUserId());
+        long userId = Long.parseLong(authDetails.getUserId());
         reviewService.registerReview(request, userId);
         return Response.createSuccessWithMessage("[Review Controller] Register Review");
     }
@@ -44,9 +44,10 @@ public class ReviewController {
     @Operation(summary = "후기 삭제", description = "회원은 본인이 작성한 후기를 삭제할 수 있다")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @DeleteMapping("/{reviewId}")
-    public Response<?> deleteReview(@PathVariable("reviewId") long reviewId, @AuthenticationPrincipal AuthDetails user)
+    public Response<?> deleteReview(@PathVariable("reviewId") long reviewId,
+                                    @AuthenticationPrincipal AuthDetails authDetails)
             throws ImageException {
-        long userId = Long.parseLong(user.getUserId());
+        long userId = Long.parseLong(authDetails.getUserId());
         reviewService.deleteReview(reviewId, userId);
         return Response.createSuccessWithMessage("[Review Controller] Delete Review");
     }
