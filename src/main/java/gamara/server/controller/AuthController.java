@@ -33,14 +33,15 @@ public class AuthController {
     @PostMapping("/kakao/login")
     public Response<LoginResultDto> loginKakao(@RequestBody KakaoLoginRequest request) {
         LoginResultDto response = authService.loginKakao(request);
-        return Response.createSuccess(response);
+        return Response.createSuccess("[Auth Controller] Complete Kakao Login", response);
     }
 
     @Operation(summary = "access token 재발급", description = "만료된 access token 을 refresh token으로 재발급 하는 API")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @PostMapping("/reissue")
     public Response<ReissueResultDto> reissueToken(@RequestBody ReissueRequest reissueRequest) {
-        return Response.createSuccess(authService.reissueToken(reissueRequest.refreshToken()));
+        return Response.createSuccess("[Auth Controller] Complete Reissue",
+                authService.reissueToken(reissueRequest.refreshToken()));
     }
 
     @Operation(summary = "로그아웃", description = "로그아웃 하는 API access token과 refresh token 을 body에 담아 보내고 서버에서 토큰을 만료시킨다.")
@@ -48,6 +49,6 @@ public class AuthController {
     @PostMapping("/logout")
     public Response<?> logout(@RequestBody LogoutRequest logoutRequest) {
         authService.logout(logoutRequest);
-        return Response.createSuccessWithNoData();
+        return Response.createSuccessWithMessage("[Auth Controller] Complete Logout");
     }
 }
