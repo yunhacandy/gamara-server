@@ -38,7 +38,7 @@ public class User {
     private Provider provider;
 
     @Column(nullable = false)
-    private boolean isDeleted;
+    private boolean isDeleted = false;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
