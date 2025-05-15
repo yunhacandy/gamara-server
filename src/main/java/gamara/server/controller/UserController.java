@@ -30,6 +30,6 @@ public class UserController {
     @GetMapping
     public Response<UserInfoDto> getMyInfo(@AuthenticationPrincipal AuthDetails authDetails) {
         long userId = Long.parseLong(authDetails.getUserId());
-        return Response.createSuccess("[User Controller] Complete withdraw user", userService.getMyInfo(userId));
+        return Response.createSuccess("[User Controller] Get User Info", userService.getMyInfo(userId));
     }
 }
