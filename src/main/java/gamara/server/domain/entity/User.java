@@ -1,7 +1,6 @@
 package gamara.server.domain.entity;
 
 import gamara.server.enums.Provider;
-import gamara.server.enums.UserStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -39,14 +38,21 @@ public class User {
     private Provider provider;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private UserStatus userStatus;
-
-    private boolean isDeleted;
+    private boolean deleted = false;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private LocalDateTime modifiedAt;
+
+    public void markAsDeleted() {
+        this.deleted = true;
+        this.modifiedAt = LocalDateTime.now();
+    }
+
+    public void updateUserInfo(String nickname) {
+        this.nickname = nickname;
+        this.modifiedAt = LocalDateTime.now();
+    }
 }

@@ -3,7 +3,7 @@ package gamara.server.service;
 import gamara.server.common.exception.AppException;
 import gamara.server.common.exception.ErrorCode;
 import gamara.server.common.exception.ImageException;
-import gamara.server.converter.ReviewDtoConverter;
+import gamara.server.converter.ReviewConverter;
 import gamara.server.domain.entity.Review;
 import gamara.server.domain.dto.request.ReviewCreateRequest;
 import gamara.server.repository.ReviewRepository;
@@ -36,7 +36,7 @@ public class ReviewService {
         basicValidator.validateLevelRange(request.peanutLevel());
         basicValidator.validateLevelRange(request.tingleLevel());
 
-        entityValidator.validateUserExists(userId);
+        entityValidator.validateUserIsActive(userId);
         entityValidator.validateStoreExists(request.storeId());
 
         if (reviewRepository.existsByUserIdAndStoreId(userId, request.storeId())) {
@@ -49,7 +49,7 @@ public class ReviewService {
             imageUrl = s3Service.uploadFile(imageFile, IMAGE_DIR);
         }
 
-        Review review = ReviewDtoConverter.toEntity(userId, request, imageUrl);
+        Review review = ReviewConverter.toEntity(userId, request, imageUrl);
         reviewRepository.save(review);
 
         log.trace("Completed registering review: reviewId={}", review.getId());
@@ -60,7 +60,8 @@ public class ReviewService {
         basicValidator.validateIdRange(reviewId);
         basicValidator.validateIdRange(userId);
 
-        entityValidator.validateUserExists(userId);
+        log.info("Validating user is active: {}", userId);
+        entityValidator.validateUserIsActive(userId);
 
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new AppException(ErrorCode.REVIEW_NOT_FOUND));

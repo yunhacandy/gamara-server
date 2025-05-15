@@ -4,7 +4,8 @@ import gamara.server.domain.entity.Review;
 import gamara.server.domain.dto.request.ReviewCreateRequest;
 import java.time.LocalDateTime;
 
-public class ReviewDtoConverter {
+public class ReviewConverter {
+
     public static Review toEntity(long userId, ReviewCreateRequest request, String imageUrl) {
         return Review.builder()
                 .userId(userId)

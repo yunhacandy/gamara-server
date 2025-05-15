@@ -19,6 +19,7 @@ public enum ErrorCode {
 
     //User
     USER_NOT_FOUND("U-001"),
+    USER_ALREADY_DELETED("U-002"),
 
     //Review
     REVIEW_NOT_FOUND("R-001"),
