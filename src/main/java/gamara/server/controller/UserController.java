@@ -28,8 +28,8 @@ public class UserController {
     @Operation(summary = "회원 정보 조회", description = "현재 로그인된 사용자가 자신의 정보를 조회합니다")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @GetMapping
-    public Response<UserInfoDto> getMyInfo(@AuthenticationPrincipal AuthDetails authDetails) {
+    public Response<UserInfoDto> getUserInfo(@AuthenticationPrincipal AuthDetails authDetails) {
         long userId = Long.parseLong(authDetails.getUserId());
-        return Response.createSuccess("[User Controller] Get User Info", userService.getMyInfo(userId));
+        return Response.createSuccess("[User Controller] Get User Info", userService.getUserInfo(userId));
     }
 }

@@ -19,7 +19,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public UserInfoDto getMyInfo(long userId) {
+    public UserInfoDto getUserInfo(long userId) {
         entityValidator.validateUserIsActive(userId);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
