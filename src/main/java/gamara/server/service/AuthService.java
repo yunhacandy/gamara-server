@@ -3,18 +3,19 @@ package gamara.server.service;
 import gamara.server.common.exception.AppException;
 import gamara.server.common.exception.ErrorCode;
 import gamara.server.converter.AuthConverter;
-import gamara.server.domain.entity.User;
-import gamara.server.repository.UserRepository;
 import gamara.server.domain.dto.LoginResultDto;
 import gamara.server.domain.dto.ReissueResultDto;
 import gamara.server.domain.dto.request.KakaoLoginRequest;
 import gamara.server.domain.dto.request.LogoutRequest;
+import gamara.server.domain.dto.request.WithdrawRequest;
 import gamara.server.domain.dto.response.OAuthUserInfoResponse;
-import gamara.server.enums.Provider;
+import gamara.server.domain.entity.User;
 import gamara.server.domain.entity.redis.entity.BlackList;
 import gamara.server.domain.entity.redis.entity.RefreshToken;
+import gamara.server.enums.Provider;
 import gamara.server.repository.BlackListRepository;
 import gamara.server.repository.RefreshTokenRepository;
+import gamara.server.repository.UserRepository;
 import gamara.server.security.jwt.JwtProvider;
 import gamara.server.security.jwt.properties.JwtProperties;
 import gamara.server.validator.BasicValidator;
@@ -110,6 +111,27 @@ public class AuthService {
         deleteRefreshToken(logoutRequest.refreshToken());
     }
 
+    @Transactional
+    public void withdraw(long userId, WithdrawRequest withdrawRequest) {
+        basicValidator.validateIdRange(userId);
+        entityValidator.validateUserIsActive(userId);
+
+        // 1. accessToken 블랙리스트 처리
+        setBlackList(withdrawRequest.accessToken());
+
+        // 2. RefreshToken 삭제
+        RefreshToken token = refreshTokenRepository.findByRefreshToken(withdrawRequest.refreshToken())
+                .orElseThrow(() -> new AppException(ErrorCode.REFRESH_TOKEN_NOT_FOUND));
+        refreshTokenRepository.delete(token);
+
+        // 3. 회원 삭제 처리
+        userRepository.getReferenceById(userId).markAsDeleted();
+    }
+
+    public boolean isBlocked(String accessToken) {
+        return blackListRepository.findById(accessToken).isPresent();
+    }
+
     private void setBlackList(String accessToken) {
         long ttl = jwtProvider.getExpiration(accessToken);
         BlackList blacklist = AuthConverter.toBlackList(accessToken, ttl);
@@ -123,7 +145,4 @@ public class AuthService {
         refreshTokenRepository.delete(refreshTokenEntity);
     }
 
-    public boolean isBlocked(String accessToken) {
-        return blackListRepository.findById(accessToken).isPresent();
-    }
 }

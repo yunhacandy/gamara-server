@@ -45,4 +45,9 @@ public class User {
 
     @Column(nullable = false)
     private LocalDateTime modifiedAt;
+
+    public void markAsDeleted() {
+        this.isDeleted = true;
+        this.modifiedAt = LocalDateTime.now();
+    }
 }

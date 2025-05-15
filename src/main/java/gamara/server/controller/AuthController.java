@@ -6,6 +6,8 @@ import gamara.server.domain.dto.ReissueResultDto;
 import gamara.server.domain.dto.request.KakaoLoginRequest;
 import gamara.server.domain.dto.request.LogoutRequest;
 import gamara.server.domain.dto.request.ReissueRequest;
+import gamara.server.domain.dto.request.WithdrawRequest;
+import gamara.server.security.jwt.AuthDetails;
 import gamara.server.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,6 +16,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,5 +54,14 @@ public class AuthController {
     public Response<?> logout(@RequestBody LogoutRequest logoutRequest) {
         authService.logout(logoutRequest);
         return Response.createSuccessWithMessage("[Auth Controller] Complete Logout");
+    }
+
+    @Operation(summary = "회원 탈퇴", description = "현재 로그인된 사용자가 자신의 계정을 탈퇴합니다.(soft delete)")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @DeleteMapping("/withdraw")
+    public Response<?> withdraw(@AuthenticationPrincipal AuthDetails authDetails, @RequestBody WithdrawRequest withdrawRequest) {
+        long userId = Long.parseLong(authDetails.getUserId());
+        authService.withdraw(userId, withdrawRequest);
+        return Response.createSuccessWithMessage("[Auth Controller] Complete withdraw user");
     }
 }
