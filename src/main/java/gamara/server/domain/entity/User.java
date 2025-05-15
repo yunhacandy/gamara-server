@@ -50,4 +50,9 @@ public class User {
         this.isDeleted = true;
         this.modifiedAt = LocalDateTime.now();
     }
+
+    public void updateUserInfo(String nickname) {
+        this.nickname = nickname;
+        this.modifiedAt = LocalDateTime.now();
+    }
 }

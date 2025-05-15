@@ -2,6 +2,7 @@ package gamara.server.controller;
 
 import gamara.server.common.Response;
 import gamara.server.domain.dto.UserInfoDto;
+import gamara.server.domain.dto.request.UserUpdateRequest;
 import gamara.server.security.jwt.AuthDetails;
 import gamara.server.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,10 +14,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "유저", description = "유저 관련된 api")
+@Tag(name = "회원", description = "회원 관련된 api")
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -31,5 +34,15 @@ public class UserController {
     public Response<UserInfoDto> getUserInfo(@AuthenticationPrincipal AuthDetails authDetails) {
         long userId = Long.parseLong(authDetails.getUserId());
         return Response.createSuccess("[User Controller] Get User Info", userService.getUserInfo(userId));
+    }
+
+    @Operation(summary = "회원 정보 수정", description = "현재 로그인된 사용자가 자신의 정보를 수정합니다")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @PostMapping
+    public Response<?> changeUserInfo(@AuthenticationPrincipal AuthDetails authDetails,
+                                      @RequestBody UserUpdateRequest userUpdateRequest) {
+        long userId = Long.parseLong(authDetails.getUserId());
+        userService.changeUserInfo(userId, userUpdateRequest);
+        return Response.createSuccessWithMessage("[User Controller] Change user info");
     }
 }
