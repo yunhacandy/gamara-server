@@ -18,7 +18,7 @@ public class SecurityConfig {
     private static final String[] WHITE_LIST = {
             "/swagger-ui/**",
             "/v3/api-docs/**",
-            "/api/auth//kakao/login",
+            "/api/auth/kakao/login",
             "/api/auth/reissue"
     };
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
