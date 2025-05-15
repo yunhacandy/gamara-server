@@ -114,7 +114,6 @@ public class AuthService {
     @Transactional
     public void withdraw(long userId, WithdrawRequest withdrawRequest) {
         basicValidator.validateIdRange(userId);
-        entityValidator.validateUserIsActive(userId);
 
         // 1. accessToken 블랙리스트 처리
         setBlackList(withdrawRequest.accessToken());
@@ -125,7 +124,8 @@ public class AuthService {
         refreshTokenRepository.delete(token);
 
         // 3. 회원 삭제 처리
-        userRepository.getReferenceById(userId).markAsDeleted();
+        User user = entityValidator.getActiveUserById(userId);
+        user.markAsDeleted();
     }
 
     public boolean isBlocked(String accessToken) {

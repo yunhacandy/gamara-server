@@ -2,6 +2,7 @@ package gamara.server.validator;
 
 import gamara.server.common.exception.AppException;
 import gamara.server.common.exception.ErrorCode;
+import gamara.server.domain.entity.User;
 import gamara.server.repository.StoreRepository;
 import gamara.server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,12 @@ public class EntityValidator {
         if (!userRepository.existsByIdAndIsDeletedFalse(userId)) {
             throw new AppException(ErrorCode.USER_ALREADY_DELETED);
         }
+    }
+
+    public User getActiveUserById(long userId) {
+        return userRepository.findById(userId)
+                .filter(user -> !user.isDeleted())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_ALREADY_DELETED));
     }
 
     public void validateStoreExists(long storeId) {
