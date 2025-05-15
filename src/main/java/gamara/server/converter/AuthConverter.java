@@ -21,7 +21,7 @@ public class AuthConverter {
                 .provider(provider)
                 .createdAt(LocalDateTime.now())
                 .modifiedAt(LocalDateTime.now())
-                .isDeleted(false)
+                .deleted(false)
                 .build();
     }
 

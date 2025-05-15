@@ -22,7 +22,7 @@ public class EntityValidator {
     }
 
     public void validateUserIsActive(long userId) {
-        if (!userRepository.existsByIdAndIsDeletedFalse(userId)) {
+        if (!userRepository.existsByIdAndDeletedFalse(userId)) {
             throw new AppException(ErrorCode.USER_ALREADY_DELETED);
         }
     }

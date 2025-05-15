@@ -60,6 +60,7 @@ public class ReviewService {
         basicValidator.validateIdRange(reviewId);
         basicValidator.validateIdRange(userId);
 
+        log.info("Validating user is active: {}", userId);
         entityValidator.validateUserIsActive(userId);
 
         Review review = reviewRepository.findById(reviewId)

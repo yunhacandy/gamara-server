@@ -38,7 +38,7 @@ public class User {
     private Provider provider;
 
     @Column(nullable = false)
-    private boolean isDeleted = false;
+    private boolean deleted = false;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -47,7 +47,7 @@ public class User {
     private LocalDateTime modifiedAt;
 
     public void markAsDeleted() {
-        this.isDeleted = true;
+        this.deleted = true;
         this.modifiedAt = LocalDateTime.now();
     }
 
