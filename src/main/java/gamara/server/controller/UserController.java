@@ -33,16 +33,19 @@ public class UserController {
     @GetMapping
     public Response<UserInfoDto> getUserInfo(@AuthenticationPrincipal AuthDetails authDetails) {
         long userId = Long.parseLong(authDetails.getUserId());
-        return Response.createSuccess("[User Controller] Get User Info", userService.getUserInfo(userId));
+        UserInfoDto response = userService.getUserInfo(userId);
+        log.trace("[User Controller] Get User Info");
+        return Response.createSuccess(response);
     }
 
     @Operation(summary = "회원 정보 수정", description = "현재 로그인된 사용자가 자신의 정보를 수정합니다")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @PostMapping
-    public Response<?> changeUserInfo(@AuthenticationPrincipal AuthDetails authDetails,
+    public Response<Void> changeUserInfo(@AuthenticationPrincipal AuthDetails authDetails,
                                       @RequestBody UserUpdateRequest userUpdateRequest) {
         long userId = Long.parseLong(authDetails.getUserId());
         userService.changeUserInfo(userId, userUpdateRequest);
-        return Response.createSuccessWithMessage("[User Controller] Change user info");
+        log.trace("[User Controller] Change user info");
+        return Response.createSuccessWithNoData();
     }
 }

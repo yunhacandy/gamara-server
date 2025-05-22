@@ -29,18 +29,22 @@ public class StoreController {
     @Operation(summary = "가게 추천 등록", description = "사용자는 가게당 한번의 추천을 누를 수 있습니다.")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @PostMapping("/{storeId}/recommend")
-    public Response<?> recommend(@PathVariable("storeId") long storeId, @AuthenticationPrincipal AuthDetails authDetails) {
+    public Response<Void> recommend(@PathVariable("storeId") long storeId,
+                                 @AuthenticationPrincipal AuthDetails authDetails) {
         long userId = Long.parseLong(authDetails.getUserId());
         storeService.recommendStore(userId, storeId);
-        return Response.createSuccessWithMessage("[Store Controller] Register Store Recommend");
+        log.trace("[Store Controller] Register Store Recommend");
+        return Response.createSuccessWithNoData();
     }
 
     @Operation(summary = "가게 추천 취소", description = "사용자는 자신이 눌렀던 가게 추천을 삭제할 수 있습니다.")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @DeleteMapping("/{storeId}/recommend")
-    public Response<?> deleteRecommend(@PathVariable("storeId") long storeId, @AuthenticationPrincipal AuthDetails authDetails) {
+    public Response<Void> deleteRecommend(@PathVariable("storeId") long storeId,
+                                       @AuthenticationPrincipal AuthDetails authDetails) {
         long userId = Long.parseLong(authDetails.getUserId());
         storeService.deleteStoreRecommend(userId, storeId);
-        return Response.createSuccessWithMessage("[Store Controller] Delete Store Recommend");
+        log.trace("[Store Controller] Delete Store Recommend");
+        return Response.createSuccessWithNoData();
     }
 }
