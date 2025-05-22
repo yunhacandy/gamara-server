@@ -15,11 +15,11 @@ public class Response<T> {
     private String message;
     private T data;
 
-    public static <T> Response<T> createSuccess(String message, T data) {
-        return new Response<>(SUCCESS_RESULT, message, data);
+    public static <T> Response<T> createSuccess(T data) {
+        return new Response<>(SUCCESS_RESULT, null, data);
     }
 
-    public static Response<?> createSuccessWithNoData() {
+    public static Response<Void> createSuccessWithNoData() {
         return new Response<>(SUCCESS_RESULT, null, null);
     }
 
