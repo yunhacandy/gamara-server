@@ -2,6 +2,7 @@ package gamara.server.controller;
 
 import gamara.server.common.Response;
 import gamara.server.common.exception.ImageException;
+import gamara.server.domain.dto.ReviewDto;
 import gamara.server.domain.dto.request.ReviewCreateRequest;
 import gamara.server.security.jwt.AuthDetails;
 import gamara.server.service.ReviewService;
@@ -11,10 +12,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,5 +53,14 @@ public class ReviewController {
         long userId = Long.parseLong(authDetails.getUserId());
         reviewService.deleteReview(reviewId, userId);
         return Response.createSuccessWithMessage("[Review Controller] Delete Review");
+    }
+
+    @Operation(summary = "특정 가게에 대한 후기 목록 조회", description = "특정 가게에 대한 후기를 조회해서 목록으로 가져올 수 있다.")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @GetMapping("/{storeId}")
+    public Response<List<ReviewDto>> getReviewListByStore(@PathVariable("storeId") long storeId) {
+        List<ReviewDto> reviewList = reviewService.getReviewListByStore(storeId);
+        log.trace("[Review Controller] Get Review List By StoreId");
+        return Response.createSuccess(reviewList);
     }
 }
