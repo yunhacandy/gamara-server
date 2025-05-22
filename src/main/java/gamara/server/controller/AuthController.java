@@ -37,31 +37,35 @@ public class AuthController {
     @PostMapping("/kakao/login")
     public Response<LoginResultDto> loginKakao(@RequestBody KakaoLoginRequest request) {
         LoginResultDto response = authService.loginKakao(request);
-        return Response.createSuccess("[Auth Controller] Complete Kakao Login", response);
+        log.trace("[Auth Controller] Complete Kakao Login");
+        return Response.createSuccess(response);
     }
 
     @Operation(summary = "access token 재발급", description = "만료된 access token 을 refresh token으로 재발급 하는 API")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @PostMapping("/reissue")
     public Response<ReissueResultDto> reissueToken(@RequestBody ReissueRequest reissueRequest) {
-        return Response.createSuccess("[Auth Controller] Complete Reissue",
-                authService.reissueToken(reissueRequest.refreshToken()));
+        log.trace("[Auth Controller] Complete Reissue");
+        ReissueResultDto response = authService.reissueToken(reissueRequest.refreshToken());
+        return Response.createSuccess(response);
     }
 
     @Operation(summary = "로그아웃", description = "로그아웃 하는 API access token과 refresh token 을 body에 담아 보내고 서버에서 토큰을 만료시킨다.")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @PostMapping("/logout")
-    public Response<?> logout(@RequestBody LogoutRequest logoutRequest) {
+    public Response<Void> logout(@RequestBody LogoutRequest logoutRequest) {
         authService.logout(logoutRequest);
-        return Response.createSuccessWithMessage("[Auth Controller] Complete Logout");
+        log.trace("[Auth Controller] Complete Logout");
+        return Response.createSuccessWithNoData();
     }
 
     @Operation(summary = "회원 탈퇴", description = "현재 로그인된 사용자가 자신의 계정을 탈퇴합니다.(soft delete)")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @DeleteMapping("/withdraw")
-    public Response<?> withdraw(@AuthenticationPrincipal AuthDetails authDetails, @RequestBody WithdrawRequest withdrawRequest) {
+    public Response<Void> withdraw(@AuthenticationPrincipal AuthDetails authDetails, @RequestBody WithdrawRequest withdrawRequest) {
         long userId = Long.parseLong(authDetails.getUserId());
         authService.withdraw(userId, withdrawRequest);
-        return Response.createSuccessWithMessage("[Auth Controller] Complete withdraw user");
+        log.trace("[Auth Controller] Complete withdraw user");
+        return Response.createSuccessWithNoData();
     }
 }
