@@ -38,4 +38,12 @@ public class Store {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    public void incrementRecommendCount() {
+        this.recommendCount++;
+    }
+    public void decrementRecommendCount() {
+        this.recommendCount = Math.max(0, this.recommendCount - 1);
+    }
 }
+
