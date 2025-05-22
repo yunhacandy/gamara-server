@@ -40,4 +40,20 @@ public class StoreService {
         storeRecommendRepository.save(storeRecommend);
         store.incrementRecommendCount();
     }
+
+    @Transactional
+    public void deleteStoreRecommend(long userId, long storeId) {
+        basicValidator.validateIdRange(userId);
+        basicValidator.validateIdRange(storeId);
+        entityValidator.validateUserIsActive(userId);
+
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new AppException(ErrorCode.STORE_NOT_FOUND));
+
+        StoreRecommend recommend = storeRecommendRepository.findByUserIdAndStoreId(userId, storeId)
+                .orElseThrow(() -> new AppException(ErrorCode.STORE_RECOMMEND_NOT_FOUND));
+
+        storeRecommendRepository.delete(recommend);
+
+        store.decrementRecommendCount();
+    }
 }

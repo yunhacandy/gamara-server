@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,5 +33,14 @@ public class StoreController {
         long userId = Long.parseLong(authDetails.getUserId());
         storeService.recommendStore(userId, storeId);
         return Response.createSuccessWithMessage("[Store Controller] Register Store Recommend");
+    }
+
+    @Operation(summary = "가게 추천 취소", description = "사용자는 자신이 눌렀던 가게 추천을 삭제할 수 있습니다.")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @DeleteMapping("/{storeId}/recommend")
+    public Response<?> deleteRecommend(@PathVariable("storeId") long storeId, @AuthenticationPrincipal AuthDetails authDetails) {
+        long userId = Long.parseLong(authDetails.getUserId());
+        storeService.deleteStoreRecommend(userId, storeId);
+        return Response.createSuccessWithMessage("[Store Controller] Delete Store Recommend");
     }
 }
