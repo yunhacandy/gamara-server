@@ -4,11 +4,13 @@ import gamara.server.common.exception.AppException;
 import gamara.server.common.exception.ErrorCode;
 import gamara.server.common.exception.ImageException;
 import gamara.server.converter.ReviewConverter;
-import gamara.server.domain.entity.Review;
+import gamara.server.domain.dto.ReviewDto;
 import gamara.server.domain.dto.request.ReviewCreateRequest;
+import gamara.server.domain.entity.Review;
 import gamara.server.repository.ReviewRepository;
 import gamara.server.validator.BasicValidator;
 import gamara.server.validator.EntityValidator;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -40,7 +42,7 @@ public class ReviewService {
         entityValidator.validateStoreExists(request.storeId());
 
         if (reviewRepository.existsByUserIdAndStoreId(userId, request.storeId())) {
-            throw new AppException(ErrorCode. REVIEW_ALREADY_EXISTS);
+            throw new AppException(ErrorCode.REVIEW_ALREADY_EXISTS);
         }
 
         String imageUrl = null;
@@ -78,6 +80,17 @@ public class ReviewService {
         reviewRepository.delete(review);
 
         log.trace("Completed deleting review: reviewId={}", reviewId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ReviewDto> getReviewListByStore(long storeId) {
+        basicValidator.validateIdRange(storeId);
+        entityValidator.validateStoreExists(storeId);
+
+        List<Review> reviewList = reviewRepository.findAllByStoreId(storeId);
+        return reviewList.stream()
+                .map(ReviewConverter::toDto)
+                .toList();
     }
 
     private String extractKeyFromImageUrl(String imageUrl) {
