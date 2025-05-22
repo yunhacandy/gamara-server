@@ -16,6 +16,8 @@ public enum ErrorCode {
 
     //Store
     STORE_NOT_FOUND("S-001"),
+    ALREADY_RECOMMENDED("S-002"),
+    STORE_RECOMMEND_NOT_FOUND("S-003"),
 
     //User
     USER_NOT_FOUND("U-001"),

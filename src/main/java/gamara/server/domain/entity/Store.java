@@ -39,3 +39,9 @@ public class Store {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 }
+
+    public void incrementRecommendCount() {
+        this.recommendCount++;
+    }
+}
+
