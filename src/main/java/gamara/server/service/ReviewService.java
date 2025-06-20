@@ -92,7 +92,8 @@ public class ReviewService {
 
         if (sortType == SortType.LATEST) {
             reviewList = reviewRepository.findAllByStoreIdOrderByCreatedAtDesc(storeId);
-        } else if (sortType == SortType.OLDEST) {
+        }
+        if (sortType == SortType.OLDEST) {
             reviewList = reviewRepository.findAllByStoreIdOrderByCreatedAtAsc(storeId);
         } else {
             throw new AppException(ErrorCode.INVALID_SORT_TYPE);
