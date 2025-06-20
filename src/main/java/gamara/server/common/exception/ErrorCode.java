@@ -27,6 +27,7 @@ public enum ErrorCode {
     REVIEW_NOT_FOUND("R-001"),
     REVIEW_FORBIDDEN("R-002"),
     REVIEW_ALREADY_EXISTS("R-003"),
+    INVALID_SORT_TYPE("R-004"),
 
     //Image
     INVALID_IMAGE_FILE_FORMAT("I-001"),

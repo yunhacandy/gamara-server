@@ -7,6 +7,7 @@ import gamara.server.converter.ReviewConverter;
 import gamara.server.domain.dto.ReviewDto;
 import gamara.server.domain.dto.request.ReviewCreateRequest;
 import gamara.server.domain.entity.Review;
+import gamara.server.enums.SortType;
 import gamara.server.repository.ReviewRepository;
 import gamara.server.validator.BasicValidator;
 import gamara.server.validator.EntityValidator;
@@ -83,11 +84,20 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public List<ReviewDto> getReviewListByStore(long storeId) {
+    public List<ReviewDto> getReviewListByStore(long storeId, SortType sortType) {
         basicValidator.validateIdRange(storeId);
         entityValidator.validateStoreExists(storeId);
 
-        List<Review> reviewList = reviewRepository.findAllByStoreId(storeId);
+        List<Review> reviewList;
+
+        if (sortType == SortType.LATEST) {
+            reviewList = reviewRepository.findAllByStoreIdOrderByCreatedAtDesc(storeId);
+        } else if (sortType == SortType.OLDEST) {
+            reviewList = reviewRepository.findAllByStoreIdOrderByCreatedAtAsc(storeId);
+        } else {
+            throw new AppException(ErrorCode.INVALID_SORT_TYPE);
+        }
+
         return reviewList.stream()
                 .map(ReviewConverter::toDto)
                 .toList();

@@ -4,6 +4,7 @@ import gamara.server.common.Response;
 import gamara.server.common.exception.ImageException;
 import gamara.server.domain.dto.ReviewDto;
 import gamara.server.domain.dto.request.ReviewCreateRequest;
+import gamara.server.enums.SortType;
 import gamara.server.security.jwt.AuthDetails;
 import gamara.server.service.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "후기", description = "후기 관련된 api")
@@ -37,7 +39,7 @@ public class ReviewController {
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @PostMapping
     public Response<Void> registerReview(@Valid @ModelAttribute ReviewCreateRequest request,
-                                      @AuthenticationPrincipal AuthDetails authDetails)
+                                         @AuthenticationPrincipal AuthDetails authDetails)
             throws ImageException {
         long userId = Long.parseLong(authDetails.getUserId());
         reviewService.registerReview(request, userId);
@@ -49,7 +51,7 @@ public class ReviewController {
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @DeleteMapping("/{reviewId}")
     public Response<Void> deleteReview(@PathVariable("reviewId") long reviewId,
-                                    @AuthenticationPrincipal AuthDetails authDetails)
+                                       @AuthenticationPrincipal AuthDetails authDetails)
             throws ImageException {
         long userId = Long.parseLong(authDetails.getUserId());
         reviewService.deleteReview(reviewId, userId);
@@ -60,8 +62,9 @@ public class ReviewController {
     @Operation(summary = "특정 가게에 대한 후기 목록 조회", description = "특정 가게에 대한 후기를 조회해서 목록으로 가져올 수 있다.")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @GetMapping("/{storeId}")
-    public Response<List<ReviewDto>> getReviewListByStore(@PathVariable("storeId") long storeId) {
-        List<ReviewDto> reviewList = reviewService.getReviewListByStore(storeId);
+    public Response<List<ReviewDto>> getReviewListByStore(@PathVariable("storeId") long storeId,
+                                                          @RequestParam(value = "sort", defaultValue = "LATEST") SortType sortType) {
+        List<ReviewDto> reviewList = reviewService.getReviewListByStore(storeId, sortType);
         log.trace("[Review Controller] Get Review List By StoreId");
         return Response.createSuccess(reviewList);
     }
